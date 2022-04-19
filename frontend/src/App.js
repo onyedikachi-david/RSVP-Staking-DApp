@@ -4,53 +4,27 @@ import './components/home.css';
 
 
 import * as backend from './build/index.main.mjs';
-<<<<<<< HEAD
 import {loadStdlib} from '@reach-sh/stdlib';
 import MyAlgoConnect from '@reach-sh/stdlib/ALGO_MyAlgoConnect';
-const stdlib = loadStdlib(process.env);
+const stdlib = loadStdlib('ALGO');
 
 stdlib.setWalletFallback(reach.walletFallback({
   providerEnv: 'TestNet', MyAlgoConnect })); 
 
-=======
-import { loadStdlib } from '@reach-sh/stdlib';
-import { ALGO_MyAlgoConnect as MyAlgoConnect } from '@reach-sh/stdlib';
-const stdlib = loadStdlib('ALGO');
-// const reach = loadStdlib('ALGO');
-// const providerEnv = undefined; // 'TestNet'
-stdlib.setWalletFallback(stdlib.walletFallback({
-  providerEnv: 'TestNet', MyAlgoConnect }));
->>>>>>> 3ef62197dbf8582d7cdd5c3c0c8435bdbf8701c2
 const {standardUnit} = stdlib;
 const defaultPrice = '20';
 const defaultDeadline = '50';
 
 
-<<<<<<< HEAD
 
 //       }
-=======
->>>>>>> 3ef62197dbf8582d7cdd5c3c0c8435bdbf8701c2
 class App extends React.Component {
     constructor(props) {
       super(props);
       this.state = {mode: 'Connect', first: true}
     }
 
-<<<<<<< HEAD
     
-=======
-    asyncCall = () => {
-      // const acc = await stdlib.getDefaultAccount();
-      // try {
-      //   const faucet = await stdlib.getFaucet();
-      //   stdlib.transfer(faucet, acc, stdlib.parseCurrency(10));
-      // } catch (e) {
-      //   console.error(e);
-      // }
-      this.setState({mode: 'Select' });
-    }
->>>>>>> 3ef62197dbf8582d7cdd5c3c0c8435bdbf8701c2
 
     changeColor = () => {
         this.setState({first: !this.state.first});
@@ -131,15 +105,9 @@ class App extends React.Component {
                     <a href="#"><i className="fa-brands fa-linkedin"></i></a>
                     <a href="#"><i className="fa-brands fa-pinterest"></i></a>
                   </div>
-<<<<<<< HEAD
                   <div class="forbuttons">
                     <button type="button" onClick={this.asyncCallCreate}>Create Events</button>
                     <button type="button" onClick={this.asyncCallEvent}>Events</button>
-=======
-                  <div className="forbuttons">
-                    <button type="button" onClick={this.asyncCall}>Create Events</button>
-                    <button type="button">Events</button>
->>>>>>> 3ef62197dbf8582d7cdd5c3c0c8435bdbf8701c2
                   </div>
                 </div>
       
