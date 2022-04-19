@@ -1,5 +1,7 @@
 'reach 0.1';
 'use strict';
+/* eslint-disable */
+
 
 export const main = Reach.App(() => {
     const D = Participant('Admin', {

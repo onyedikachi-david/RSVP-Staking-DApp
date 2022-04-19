@@ -4,6 +4,7 @@ import './components/home.css';
 
 
 import * as backend from './build/index.main.mjs';
+<<<<<<< HEAD
 import {loadStdlib} from '@reach-sh/stdlib';
 import MyAlgoConnect from '@reach-sh/stdlib/ALGO_MyAlgoConnect';
 const stdlib = loadStdlib(process.env);
@@ -11,20 +12,45 @@ const stdlib = loadStdlib(process.env);
 stdlib.setWalletFallback(reach.walletFallback({
   providerEnv: 'TestNet', MyAlgoConnect })); 
 
+=======
+import { loadStdlib } from '@reach-sh/stdlib';
+import { ALGO_MyAlgoConnect as MyAlgoConnect } from '@reach-sh/stdlib';
+const stdlib = loadStdlib('ALGO');
+// const reach = loadStdlib('ALGO');
+// const providerEnv = undefined; // 'TestNet'
+stdlib.setWalletFallback(stdlib.walletFallback({
+  providerEnv: 'TestNet', MyAlgoConnect }));
+>>>>>>> 3ef62197dbf8582d7cdd5c3c0c8435bdbf8701c2
 const {standardUnit} = stdlib;
 const defaultPrice = '20';
 const defaultDeadline = '50';
 
 
+<<<<<<< HEAD
 
 //       }
+=======
+>>>>>>> 3ef62197dbf8582d7cdd5c3c0c8435bdbf8701c2
 class App extends React.Component {
     constructor(props) {
       super(props);
       this.state = {mode: 'Connect', first: true}
     }
 
+<<<<<<< HEAD
     
+=======
+    asyncCall = () => {
+      // const acc = await stdlib.getDefaultAccount();
+      // try {
+      //   const faucet = await stdlib.getFaucet();
+      //   stdlib.transfer(faucet, acc, stdlib.parseCurrency(10));
+      // } catch (e) {
+      //   console.error(e);
+      // }
+      this.setState({mode: 'Select' });
+    }
+>>>>>>> 3ef62197dbf8582d7cdd5c3c0c8435bdbf8701c2
 
     changeColor = () => {
         this.setState({first: !this.state.first});
@@ -64,54 +90,60 @@ class App extends React.Component {
       let app = null;
       if (mode === 'Connect') {
         app = (
-            <section class="hero">
-            <div class="main-width">
+            <section className="hero">
+            <div className="main-width">
               <header>
-                <div class="logo">
-                  <i class="fa-brands fa-weebly"></i>
+                <div className="logo">
+                  <i className="fa-brands fa-weebly"></i>
                 </div>
       
                 <nav>
-                  <div class="hamb" onClick={this.changeColor}>
+                  <div className="hamb" onClick={this.changeColor}>
                     <span></span>
                     <span></span>
                     <span></span>
                   </div>
       
-                  <ul class={this.state.first ? "nav-list" : "nav-list open"}>
+                  <ul className={this.state.first ? "nav-list" : "nav-list open"}>
                     <li><a href="#">Home</a></li>
                     <li><a href="#">About</a></li>
                     <li><a href="#">Services</a></li>
                     <li><a href="#">Works</a></li>
-                    <li class="btn"><a href="#">Contact Us</a></li>
+                    <li className="btn"><a href="#">Contact Us</a></li>
                   </ul>
                 </nav>
               </header>
       
-              <div class="container">
-                <div class="hero-text">
+              <div className="container">
+                <div className="hero-text">
                   <h3>Hi, There!</h3>
-                  <h1>Welcome <span class="input">To Umoja RSVP hub.</span></h1>
+                  <h1>Welcome <span className="input">To Umoja RSVP hub.</span></h1>
                   <p>
                     Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nostrum
                     quisquam repellendus, enim dolorem dignissimos recusandae fugit
                     perspiciatis exercitationem deleniti ut illum quos necessitatibus
                     asperiores vero ipsum dolore? Vitae, ipsam ea.
                   </p>
-                  <div class="social">
-                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                    <a href="#"><i class="fa-brands fa-behance-square"></i></a>
-                    <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
-                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-                    <a href="#"><i class="fa-brands fa-pinterest"></i></a>
+                  <div className="social">
+                    <a href="#"><i className="fa-brands fa-facebook"></i></a>
+                    <a href="#"><i className="fa-brands fa-behance-square"></i></a>
+                    <a href="#"><i className="fa-brands fa-whatsapp"></i></a>
+                    <a href="#"><i className="fa-brands fa-linkedin"></i></a>
+                    <a href="#"><i className="fa-brands fa-pinterest"></i></a>
                   </div>
+<<<<<<< HEAD
                   <div class="forbuttons">
                     <button type="button" onClick={this.asyncCallCreate}>Create Events</button>
                     <button type="button" onClick={this.asyncCallEvent}>Events</button>
+=======
+                  <div className="forbuttons">
+                    <button type="button" onClick={this.asyncCall}>Create Events</button>
+                    <button type="button">Events</button>
+>>>>>>> 3ef62197dbf8582d7cdd5c3c0c8435bdbf8701c2
                   </div>
                 </div>
       
-                <div class="bottom">
+                <div className="bottom">
                   <p>@ 2022 RSVP app - All Rights Reserved.</p>
                 </div>
               </div>
@@ -503,3 +535,6 @@ class App extends React.Component {
   }
 
   export default App;
+
+
+  
