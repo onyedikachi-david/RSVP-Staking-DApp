@@ -186,6 +186,13 @@ span {
   font-size: 15px;
 }
 
+.rsvp_part{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
 @media screen and (max-width: 930px) {
   nav .hamb {
     display: initial;

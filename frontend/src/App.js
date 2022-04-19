@@ -4,35 +4,54 @@ import './components/home.css';
 
 
 import * as backend from './build/index.main.mjs';
-import { loadStdlib } from '@reach-sh/stdlib';
+import {loadStdlib} from '@reach-sh/stdlib';
 import MyAlgoConnect from '@reach-sh/stdlib/ALGO_MyAlgoConnect';
 const stdlib = loadStdlib(process.env);
-const providerEnv = undefined; // 'TestNet'
+
 stdlib.setWalletFallback(reach.walletFallback({
-  providerEnv, MyAlgoConnect }));
+  providerEnv: 'TestNet', MyAlgoConnect })); 
+
 const {standardUnit} = stdlib;
 const defaultPrice = '20';
 const defaultDeadline = '50';
 
- const asyncCall = async () => {
-      const acc = await stdlib.getDefaultAccount();
-      try {
-        const faucet = await stdlib.getFaucet();
-        stdlib.transfer(faucet, acc, stdlib.parseCurrency(100));
-      } catch (e) {
-        console.error(e);
-      }
-      this.setState({mode: 'Select', acc });
-    }
+
+
+//       }
 class App extends React.Component {
     constructor(props) {
       super(props);
       this.state = {mode: 'Connect', first: true}
     }
 
+    
+
     changeColor = () => {
         this.setState({first: !this.state.first});
       }
+
+    asyncCallCreate = async () => {
+        const acc = await stdlib.getDefaultAccount();
+        try {
+          const faucet = await stdlib.getFaucet();
+          stdlib.transfer(faucet, acc, stdlib.parseCurrency(100));
+        } catch (e) {
+          console.error(e);
+        }
+        this.setState({mode: 'Select', acc });
+      }
+
+
+    asyncCallEvent = async () => {
+        const acc = await stdlib.getDefaultAccount();
+        try {
+          const faucet = await stdlib.getFaucet();
+          stdlib.transfer(faucet, acc, stdlib.parseCurrency(100));
+        } catch (e) {
+          console.error(e);
+        }
+        this.setState({mode: 'SelectEvent', acc });
+    }
     
     selectRole(role) { this.setState({mode: 'RunRole', role}); }
     doCreate()  { this.selectRole(<Create  acc={this.state.acc} />); }
@@ -87,8 +106,8 @@ class App extends React.Component {
                     <a href="#"><i class="fa-brands fa-pinterest"></i></a>
                   </div>
                   <div class="forbuttons">
-                    <button type="button" onClick={() => asyncCall()}>Create Events</button>
-                    <button type="button">Events</button>
+                    <button type="button" onClick={this.asyncCallCreate}>Create Events</button>
+                    <button type="button" onClick={this.asyncCallEvent}>Events</button>
                   </div>
                 </div>
       
@@ -99,6 +118,97 @@ class App extends React.Component {
             </div>
           </section>
         )
+      } else if (mode === 'Select') {
+        app = (
+            <section class="hero">
+            <div class="main-width">
+              <header>
+                <div class="logo">
+                  <i class="fa-brands fa-weebly"></i>
+                </div>
+      
+                <nav>
+                  <div class="hamb" onClick={this.changeColor}>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+      
+                  <ul class={this.state.first ? "nav-list" : "nav-list open"}>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Works</a></li>
+                    <li class="btn"><a href="#">Contact Us</a></li>
+                  </ul>
+                </nav>
+              </header>
+      
+              <div class="container">
+                <div class="hero-text">
+                  
+                  <div class="forbuttons">
+                    <button type="button" onClick={() => parent.doCreate()}>Schedule Events</button>
+                    <button type="button" onClick={() => parent.doClose()}>Close an Event</button>
+                  </div>
+                </div>
+      
+                <div class="bottom">
+                  <p>@ 2022 RSVP app - All Rights Reserved.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+          //comment off
+          
+        );
+      }else if (mode === 'SelectEvent') {
+        app = (
+
+            <section class="hero">
+            <div class="main-width">
+              <header>
+                <div class="logo">
+                  <i class="fa-brands fa-weebly"></i>
+                </div>
+      
+                <nav>
+                  <div class="hamb" onClick={this.changeColor}>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+      
+                  <ul class={this.state.first ? "nav-list" : "nav-list open"}>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Works</a></li>
+                    <li class="btn"><a href="#">Contact Us</a></li>
+                  </ul>
+                </nav>
+              </header>
+      
+              <div class="container">
+                <div class="hero-text">
+                  
+                  <div class="forbuttons">
+                    <button type="button" onClick={() => parent.doRSVP()}>Rsvp an Event</button>
+                    <button type="button" onClick={() => parent.doCheckin()}>Checkin Into an Event</button>
+                  </div>
+                </div>
+      
+                <div class="bottom">
+                  <p>@ 2022 RSVP app - All Rights Reserved.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+          //comment off
+
+
+          
+        );
       } else { // 'RunRole'
         app = role;
       }
@@ -143,8 +253,10 @@ class App extends React.Component {
         const priceStandard = this.state?.priceStandard || defaultPrice;
         const deadline = this.state?.deadline || defaultDeadline;
         me = (
-          <div>
-            What is the RSVP fee?
+          <div className="hero">
+
+            <div className="rsvp_part">
+                What is the RSVP fee?
             <br />
             <textarea
               onChange={(e) => this.setState({
@@ -165,6 +277,8 @@ class App extends React.Component {
               deadline,
             )}
             >Launch</button>
+            </div>
+            
           </div>
         );
       } else if (mode === 'Wait') {
@@ -215,20 +329,23 @@ class App extends React.Component {
       if (mode === 'EnterInfo') {
         const ctcInfoStr = this.state?.ctcInfoStr || '';
         me = (
-          <div>
-            What is the event info?
-            <br />
-            <textarea
-              className='ContractInfo'
-              spellCheck='false'
-              onChange={(e) => this.setState({ctcInfoStr: e.currentTarget.value})}
-              placeholder='{}'
-            />
-            <br />
-            <button
-              disabled={!ctcInfoStr}
-              onClick={() => parent.doRSVP(ctcInfoStr)}
-            >RSVP</button>
+          <div className="hero">
+              <div className="rsvp_part">
+                What is the event info?
+                <br />
+                <textarea
+                className='ContractInfo'
+                spellCheck='false'
+                onChange={(e) => this.setState({ctcInfoStr: e.currentTarget.value})}
+                placeholder='{}'
+                />
+                <br />
+                <button
+                disabled={!ctcInfoStr}
+                onClick={() => parent.doRSVP(ctcInfoStr)}
+                >RSVP</button>
+              </div>
+            
           </div>
         );
       } else if (mode === 'Wait') {
@@ -280,8 +397,9 @@ class App extends React.Component {
         const ctcInfoStr = this.state?.ctcInfoStr || '';
         const who = this.state?.who || '';
         me = (
-          <div>
-            What is the event info?
+          <div className="hero">
+              <div className="rsvp_part">
+                    What is the event info?
             <br />
             <textarea
               className='ContractInfo'
@@ -301,6 +419,8 @@ class App extends React.Component {
               disabled={!ctcInfoStr}
               onClick={() => parent.doCheckin(ctcInfoStr, who)}
             >RSVP</button>
+              </div>
+            
           </div>
         );
       } else if (mode === 'Wait') {
@@ -345,7 +465,7 @@ class App extends React.Component {
       if (mode === 'EnterInfo') {
         const ctcInfoStr = this.state?.ctcInfoStr || '';
         me = (
-          <div>
+          <div className='hero'>
             What is the event info?
             <br />
             <textarea
