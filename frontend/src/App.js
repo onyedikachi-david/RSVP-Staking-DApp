@@ -107,8 +107,8 @@ class App extends React.Component {
                     <a href="#"><i className="fa-brands fa-pinterest"></i></a>
                   </div>
                   <div class="forbuttons">
-                    <button type="button" onClick={this.asyncCallCreate}>Create Events</button>
-                    <button type="button" onClick={this.asyncCallEvent}>Events</button>
+                    <button type="button" onClick={() => parent.doCreate()}>Create Events</button>
+                    <button type="button" onClick={() => parent.doRSVP()}>Events</button>
                   </div>
                 </div>
       
@@ -119,98 +119,7 @@ class App extends React.Component {
             </div>
           </section>
         )
-      } else if (mode === 'Select') {
-        app = (
-            <section class="hero">
-            <div class="main-width">
-              <header>
-                <div class="logo">
-                  <i class="fa-brands fa-weebly"></i>
-                </div>
-      
-                <nav>
-                  <div class="hamb" onClick={this.changeColor}>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-      
-                  <ul class={this.state.first ? "nav-list" : "nav-list open"}>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Services</a></li>
-                    <li><a href="#">Works</a></li>
-                    <li class="btn"><a href="#">Contact Us</a></li>
-                  </ul>
-                </nav>
-              </header>
-      
-              <div class="container">
-                <div class="hero-text">
-                  
-                  <div class="forbuttons">
-                    <button type="button" onClick={() => parent.doCreate()}>Schedule Events</button>
-                    <button type="button" onClick={() => parent.doClose()}>Close an Event</button>
-                  </div>
-                </div>
-      
-                <div class="bottom">
-                  <p>@ 2022 RSVP app - All Rights Reserved.</p>
-                </div>
-              </div>
-            </div>
-          </section>
-          //comment off
-          
-        );
-      }else if (mode === 'SelectEvent') {
-        app = (
-
-            <section class="hero">
-            <div class="main-width">
-              <header>
-                <div class="logo">
-                  <i class="fa-brands fa-weebly"></i>
-                </div>
-      
-                <nav>
-                  <div class="hamb" onClick={this.changeColor}>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-      
-                  <ul class={this.state.first ? "nav-list" : "nav-list open"}>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Services</a></li>
-                    <li><a href="#">Works</a></li>
-                    <li class="btn"><a href="#">Contact Us</a></li>
-                  </ul>
-                </nav>
-              </header>
-      
-              <div class="container">
-                <div class="hero-text">
-                  
-                  <div class="forbuttons">
-                    <button type="button" onClick={() => parent.doRSVP()}>Rsvp an Event</button>
-                    <button type="button" onClick={() => parent.doCheckin()}>Checkin Into an Event</button>
-                  </div>
-                </div>
-      
-                <div class="bottom">
-                  <p>@ 2022 RSVP app - All Rights Reserved.</p>
-                </div>
-              </div>
-            </div>
-          </section>
-          //comment off
-
-
-          
-        );
-      } else { // 'RunRole'
+      }  else { // 'RunRole'
         app = role;
       }
       return (
@@ -226,14 +135,15 @@ class App extends React.Component {
       super(props);
       this.setState({mode: 'EnterInfo'});
     }
-    async enterInfo(priceStandard, deadline) {
+    async enterInfo(priceStandard, deadline, description) {
       const ctc = this.props.acc.contract(backend);
-      this.setState({mode: 'Wait', priceStandard, deadline, ctc});
-      console.log({priceStandard, deadline});
+      this.setState({mode: 'Wait', priceStandard, deadline, ctc, description});
+      console.log({priceStandard, deadline, description});
       try {
         await ctc.p.Admin({
           price: stdlib.parseCurrency(priceStandard),
           deadline: stdlib.bigNumberify(deadline),
+          description: description,
           ready: () => {
             throw 42;
           }
@@ -257,7 +167,15 @@ class App extends React.Component {
           <div className="hero">
 
             <div className="rsvp_part">
-                What is the RSVP fee?
+                <p>What is the event all about?</p>
+            <br />
+            <textarea
+              onChange={(e) => this.setState({
+                description: e.currentTarget.value})}
+              placeholder='description of events'
+            />
+            <br />
+            <p> What is the RSVP fee?</p>
             <br />
             <textarea
               onChange={(e) => this.setState({
@@ -291,16 +209,58 @@ class App extends React.Component {
       } else { // 'Done'
         const ctcInfoStr = this.state?.ctcInfoStr || '';
         me = (
-          <div>
-            Your event is ready for users to RSVP to!
-            <br />
+            <section class="hero">
+            <div class="main-width">
+              <header>
+                <div class="logo">
+                  <i class="fa-brands fa-weebly"></i>
+                </div>
+      
+                <nav>
+                  <div class="hamb" onClick={this.changeColor}>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+      
+                  <ul class={this.state.first ? "nav-list" : "nav-list open"}>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Works</a></li>
+                    <li class="btn"><a href="#">Contact Us</a></li>
+                  </ul>
+                </nav>
+              </header>
+      
+              <div class="container">
+                <div class="hero-text">
+                <h3>Admin Area</h3> 
+                <div>
+                    Your event is ready for users to RSVP to!
+                    <br />
   
-            Please share the following contract info with them:
+                    Please share the following contract info with them:
   
-            <pre className='ContractInfo'>
-              {ctcInfoStr}
-            </pre>
-          </div>
+                    <pre className='ContractInfo'>
+                    {this.state.description}
+                    {ctcInfoStr}
+                    </pre>
+                </div>
+                  <div class="forbuttons">
+                    <button type="button" onClick={() => parent.doClose()}>Stop Events</button>
+                    <button type="button" onClick={() => parent.doCheckin()}>Checkin Rsvp's</button>
+                  </div>
+                </div>
+      
+                <div class="bottom">
+                  <p>@ 2022 RSVP app - All Rights Reserved.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+            //div
+          
         );
       }
       return (

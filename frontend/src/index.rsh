@@ -7,6 +7,7 @@ export const main = Reach.App(() => {
     const D = Participant('Admin', {
         price: UInt,
         deadline: UInt,
+        description: Bytes,
         ready: Fun([], Null),
     });
     const A = API('Attendee', {
@@ -21,8 +22,9 @@ export const main = Reach.App(() => {
     D.only(() => {
         const price = declassify(interact.price);
         const deadline = declassify(interact.deadline);
+        const description = declassify(interact.description);
     });
-    D.publish(price, deadline);
+    D.publish(price, deadline, description);
     D.interact.ready();
 
     const RSVPs = new Map(Object({
