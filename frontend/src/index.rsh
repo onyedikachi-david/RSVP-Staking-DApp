@@ -35,8 +35,8 @@ export const main = Reach.App(() => {
   call(A.viewDescription)
     // .pay((a) => a)
     k2(description);
-    
-  commit();
+
+  // commit();
 
   const deadlineBlock = relativeTime(deadline);
   const RSVPs = new Set();
