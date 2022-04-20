@@ -337,6 +337,7 @@ class App extends React.Component {
       );
     }
   }
+
   
   class Checkin extends React.Component {
     constructor(props) {
