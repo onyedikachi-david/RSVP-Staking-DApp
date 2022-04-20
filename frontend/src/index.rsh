@@ -7,10 +7,8 @@ export const main = Reach.App(() => {
     price: UInt,
     deadline: UInt,
     ready: Fun([], Null),
-    description: Bytes(256),
   });
   const A = API('Attendee', {
-    viewDescription: Fun([], Bytes(256)),
     iWillGo: Fun([], Bool),
   });
   const C = API('Checkin', {
@@ -22,21 +20,11 @@ export const main = Reach.App(() => {
   D.only(() => {
     const price = declassify(interact.price);
     const deadline = declassify(interact.deadline);
-    const description = declassify(interact.description);
   });
-  D.publish(price, deadline, description);
+  D.publish(price, deadline);
   commit();
   D.publish();
   D.interact.ready();
-
-  commit();
-
-  const [ _, k2 ] =
-  call(A.viewDescription)
-    // .pay((a) => a)
-    k2(description);
-
-  // commit();
 
   const deadlineBlock = relativeTime(deadline);
   const RSVPs = new Set();
@@ -73,12 +61,6 @@ export const main = Reach.App(() => {
         k(true);
         return checkIWillGo(this)();
     })
-    // .api(A.viewDescription,
-    //   () => 0,
-    //   (k) => {
-    //     k(description);
-        // return checkIWillGo(this)();
-    // })
     .api(C.theyCame,
       (who) => { const _ = checkTheyCame(this, who); },
       (_) => 0,

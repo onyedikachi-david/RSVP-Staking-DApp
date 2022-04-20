@@ -33,26 +33,27 @@ class App extends React.Component {
 
     asyncCallCreate = async () => {
         const acc = await stdlib.getDefaultAccount();
-        try {
-          const faucet = await stdlib.getFaucet();
-          stdlib.transfer(faucet, acc, stdlib.parseCurrency(100));
-        } catch (e) {
-          console.error(e);
-        }
+        // try {
+        //   const faucet = await stdlib.getFaucet();
+        //   stdlib.transfer(faucet, acc, stdlib.parseCurrency(100));
+        // } catch (e) {
+        //   console.error(e);
+        // }
+        console.log('acc', acc);
         this.setState({mode: 'Select', acc });
       }
 
 
-    asyncCallEvent = async () => {
-        const acc = await stdlib.getDefaultAccount();
-        try {
-          const faucet = await stdlib.getFaucet();
-          stdlib.transfer(faucet, acc, stdlib.parseCurrency(100));
-        } catch (e) {
-          console.error(e);
-        }
-        this.setState({mode: 'SelectEvent', acc });
-    }
+    // asyncCallEvent = async () => {
+    //     const acc = await stdlib.getDefaultAccount();
+    //     try {
+    //       const faucet = await stdlib.getFaucet();
+    //       stdlib.transfer(faucet, acc, stdlib.parseCurrency(100));
+    //     } catch (e) {
+    //       console.error(e);
+    //     }
+    //     this.setState({mode: 'SelectEvent', acc });
+    // }
     
     selectRole(role) { this.setState({mode: 'RunRole', role}); }
     doCreate()  { this.selectRole(<Create  acc={this.state.acc} />); }
@@ -107,6 +108,61 @@ class App extends React.Component {
                     <a href="#"><i className="fa-brands fa-pinterest"></i></a>
                   </div>
                   <div class="forbuttons">
+                    <button type="button" onClick={this.asyncCallCreate}>Connect Wallet</button>
+                  </div>
+                </div>
+      
+                <div className="bottom">
+                  <p>@ 2022 RSVP app - All Rights Reserved.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        )
+      }else if(mode === 'Select'){
+        app = (
+        <section className="hero">
+            <div className="main-width">
+              <header>
+                <div className="logo">
+                  <i className="fa-brands fa-weebly"></i>
+                </div>
+      
+                <nav>
+                  <div className="hamb" onClick={this.changeColor}>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+      
+                  <ul className={this.state.first ? "nav-list" : "nav-list open"}>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Works</a></li>
+                    <li className="btn"><a href="#">Contact Us</a></li>
+                  </ul>
+                </nav>
+              </header>
+      
+              <div className="container">
+                <div className="hero-text">
+                  <h3>Hi, There!</h3>
+                  <h1>Welcome <span className="input">To Umoja RSVP hub.</span></h1>
+                  <p>
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nostrum
+                    quisquam repellendus, enim dolorem dignissimos recusandae fugit
+                    perspiciatis exercitationem deleniti ut illum quos necessitatibus
+                    asperiores vero ipsum dolore? Vitae, ipsam ea.
+                  </p>
+                  <div className="social">
+                    <a href="#"><i className="fa-brands fa-facebook"></i></a>
+                    <a href="#"><i className="fa-brands fa-behance-square"></i></a>
+                    <a href="#"><i className="fa-brands fa-whatsapp"></i></a>
+                    <a href="#"><i className="fa-brands fa-linkedin"></i></a>
+                    <a href="#"><i className="fa-brands fa-pinterest"></i></a>
+                  </div>
+                  <div class="forbuttons">
                     <button type="button" onClick={() => parent.doCreate()}>Create Events</button>
                     <button type="button" onClick={() => parent.doRSVP()}>Events</button>
                   </div>
@@ -118,8 +174,7 @@ class App extends React.Component {
               </div>
             </div>
           </section>
-        )
-      }  else { // 'RunRole'
+        )}  else { // 'RunRole'
         app = role;
       }
       return (
@@ -135,15 +190,21 @@ class App extends React.Component {
       super(props);
       this.setState({mode: 'EnterInfo'});
     }
-    async enterInfo(priceStandard, deadline, description) {
+    async doClose(ctcInfoStr) {
+      const ctcInfo = JSON.parse(ctcInfoStr);
+      const ctc = this.props.acc.contract(backend, ctcInfo);
+      this.setState({mode: 'Wait', ctc});
+      await ctc.apis.Checkin.timesUp();
+      this.setState({mode: 'Done'});
+    }
+    async enterInfo(priceStandard, deadline ) {
       const ctc = this.props.acc.contract(backend);
-      this.setState({mode: 'Wait', priceStandard, deadline, ctc, description});
-      console.log({priceStandard, deadline, description});
+      this.setState({mode: 'Wait', priceStandard, deadline, ctc });
+      console.log({priceStandard, deadline});
       try {
         await ctc.p.Admin({
           price: stdlib.parseCurrency(priceStandard),
           deadline: stdlib.bigNumberify(deadline),
-          description: description,
           ready: () => {
             throw 42;
           }
@@ -167,14 +228,7 @@ class App extends React.Component {
           <div className="hero">
 
             <div className="rsvp_part">
-                <p>What is the event all about?</p>
-            <br />
-            <textarea
-              onChange={(e) => this.setState({
-                description: e.currentTarget.value})}
-              placeholder='description of events'
-            />
-            <br />
+                
             <p> What is the RSVP fee?</p>
             <br />
             <textarea
@@ -243,7 +297,6 @@ class App extends React.Component {
                     Please share the following contract info with them:
   
                     <pre className='ContractInfo'>
-                    {this.state.description}
                     {ctcInfoStr}
                     </pre>
                 </div>
@@ -283,15 +336,6 @@ class App extends React.Component {
       await ctc.apis.Attendee.iWillGo();
       this.setState({mode: 'Done'});
     }
-
-    async getDescription(ctcInfoStr) {
-        const ctcInfo = JSON.parse(ctcInfoStr);
-        const ctc = this.props.acc.contract(backend, ctcInfo);
-        this.setState({mode: 'Wait', ctc});
-        const aboutEvent = await ctc.apis.Attendee.viewDescription();
-        console.log(aboutEvent);
-        this.setState({mode: 'Description'});
-      }
     render() {
       let me = null;
       const parent = this;
@@ -312,8 +356,8 @@ class App extends React.Component {
                 <br />
                 <button
                 disabled={!ctcInfoStr}
-                onClick={() => parent.getDescription(ctcInfoStr)}
-                >view this event description</button>
+                onClick={() => parent.doRSVP(ctcInfoStr)}
+                >RSVP</button>
               </div>
             
           </div>
@@ -322,13 +366,6 @@ class App extends React.Component {
         me = (
           <div>
             Please wait while your RSVP is confirmed.
-          </div>
-        );
-      }
-      else if (mode === 'description') {
-        me = (
-          <div>
-            {aboutEvent}
           </div>
         );
       } else { // 'Done'
@@ -353,7 +390,6 @@ class App extends React.Component {
       );
     }
   }
-
   
   class Checkin extends React.Component {
     constructor(props) {
