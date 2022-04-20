@@ -283,6 +283,15 @@ class App extends React.Component {
       await ctc.apis.Attendee.iWillGo();
       this.setState({mode: 'Done'});
     }
+
+    async getDescription(ctcInfoStr) {
+        const ctcInfo = JSON.parse(ctcInfoStr);
+        const ctc = this.props.acc.contract(backend, ctcInfo);
+        this.setState({mode: 'Wait', ctc});
+        const aboutEvent = await ctc.apis.Attendee.viewDescription();
+        console.log(aboutEvent);
+        this.setState({mode: 'Description'});
+      }
     render() {
       let me = null;
       const parent = this;
@@ -303,8 +312,8 @@ class App extends React.Component {
                 <br />
                 <button
                 disabled={!ctcInfoStr}
-                onClick={() => parent.doRSVP(ctcInfoStr)}
-                >RSVP</button>
+                onClick={() => parent.getDescription(ctcInfoStr)}
+                >view this event description</button>
               </div>
             
           </div>
@@ -313,6 +322,13 @@ class App extends React.Component {
         me = (
           <div>
             Please wait while your RSVP is confirmed.
+          </div>
+        );
+      }
+      else if (mode === 'description') {
+        me = (
+          <div>
+            {aboutEvent}
           </div>
         );
       } else { // 'Done'
