@@ -5,10 +5,11 @@ import './components/home.css';
 
 import * as backend from './build/index.main.mjs';
 import {loadStdlib} from '@reach-sh/stdlib';
-import MyAlgoConnect from '@reach-sh/stdlib/ALGO_MyAlgoConnect';
+// import MyAlgoConnect from '@reach-sh/stdlib/ALGO_MyAlgoConnect';
+import { ALGO_MyAlgoConnect as MyAlgoConnect } from '@reach-sh/stdlib';
 const stdlib = loadStdlib('ALGO');
 
-stdlib.setWalletFallback(reach.walletFallback({
+stdlib.setWalletFallback(stdlib.walletFallback({
   providerEnv: 'TestNet', MyAlgoConnect })); 
 
 const {standardUnit} = stdlib;
