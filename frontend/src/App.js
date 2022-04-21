@@ -4,7 +4,7 @@ import ReactLoading from "react-loading";
 import "./components/home.css";
 // import { useState } from 'react';
 
-import * as backend from "./build/index.main.mjs";
+import * as backend from "./builds/index.main.mjs";
 import { loadStdlib } from "@reach-sh/stdlib";
 // import MyAlgoConnect from '@reach-sh/stdlib/ALGO_MyAlgoConnect';
 import { ALGO_MyAlgoConnect as MyAlgoConnect } from "@reach-sh/stdlib";

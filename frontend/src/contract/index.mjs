@@ -1,5 +1,5 @@
 import { loadStdlib } from '@reach-sh/stdlib';
-import * as backend from './build/index.main.mjs';
+import * as backend from './builds/index.main.mjs';
 
 const stdlib = loadStdlib();
 const sbal = stdlib.parseCurrency(100);
