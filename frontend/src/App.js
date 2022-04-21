@@ -114,15 +114,17 @@ class App extends React.Component {
               <div className="hero-text">
                 <h3>Hi, There!</h3>
                 <h1>
-                  Welcome <span className="input">To Umoja RSVP hub.</span>
+                  Welcome <span className="input">To RSVP DApp Using reach.sh</span>
                 </h1>
-                <p>
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                  Nostrum quisquam repellendus, enim dolorem dignissimos
-                  recusandae fugit perspiciatis exercitationem deleniti ut illum
-                  quos necessitatibus asperiores vero ipsum dolore? Vitae, ipsam
-                  ea.
-                </p>
+                <div className="list">
+                  An RSVP application, which allow you to 
+                  <ul>
+                  <li>Create an event.</li>
+                  <li>Have a backoffice/admin area for managing the event, and </li>
+                  <li>A front facing area for users to purchase their tickets/RSVP by
+                  staking themselves.</li>
+                  </ul>
+                </div>
                 <div className="social">
                   <a href="#">
                     <i className="fa-brands fa-facebook"></i>
@@ -283,34 +285,45 @@ class Create extends React.Component {
         <div className="hero">
           <div className="rsvp_part">
             <div className="form">
-            <div className="title">Create An Event</div>
+              <div className="title">Create An Event</div>
 
-            <div className="input-container ic1">
-              <input className="inputy" id="rsvp"
-                onChange={(e) =>
-                  this.setState({
-                    priceStandard: e.currentTarget.value,
-                  })
-                }
-                placeholder={defaultPrice}
-              />
-              <div class="cut"></div>
-        <label for="rsvp" class="placeholder">Rsvp fee</label>
-            </div>
-              
-            <div className="input-container ic1">
-              <input className="inputy" id="rsvp"
-                onChange={(e) =>
-                  this.setState({
-                    deadline: e.currentTarget.value,
-                  })
-                }
-                placeholder={defaultDeadline}
-              />
-              <div class="cut"></div>
-        <label for="rsvp" class="placeholder">Rsvp fee</label>
+              <div className="input-container ic1">
+                <input
+                  className="inputy"
+                  id="rsvp"
+                  onChange={(e) =>
+                    this.setState({
+                      priceStandard: e.currentTarget.value,
+                    })
+                  }
+                  placeholder={defaultPrice}
+                />
+                <div class="cut"></div>
+                <label for="rsvp" class="placeholder">
+                  Rsvp fee
+                </label>
               </div>
-              <button class="submit" onClick={() => parent.enterInfo(priceStandard, deadline)}>
+
+              <div className="input-container ic1">
+                <input
+                  className="inputy"
+                  id="rsvp"
+                  onChange={(e) =>
+                    this.setState({
+                      deadline: e.currentTarget.value,
+                    })
+                  }
+                  placeholder={defaultDeadline}
+                />
+                <div class="cut"></div>
+                <label for="rsvp" class="placeholder">
+                  Rsvp fee
+                </label>
+              </div>
+              <button
+                class="submit"
+                onClick={() => parent.enterInfo(priceStandard, deadline)}
+              >
                 Launch
               </button>
             </div>
@@ -318,12 +331,17 @@ class Create extends React.Component {
         </div>
       );
     } else if (mode === "Wait") {
-      me = <div><ReactLoading
-      type={"spinningBubbles"}
-      color={"#03fc4e"}
-      height={100}
-      width={100}
-    />Please wait while your event is initialized. </div>;
+      me = (
+        <div>
+          <ReactLoading
+            type={"spinningBubbles"}
+            color={"#03fc4e"}
+            height={100}
+            width={100}
+          />
+          Please wait while your event is initialized.{" "}
+        </div>
+      );
     } else if (mode === "Done") {
       // 'Done'
       const ctcInfoStr = this.state?.ctcInfoStr || "";
@@ -366,12 +384,14 @@ class Create extends React.Component {
               <div class="hero-text">
                 <div className="form">
                   <div className="subtitle"> Admin </div>
-                  <br/>
-                  <div className="subtitle"> Your event is ready for users to RSVP to! 
-                  <br/>Please share the following contract info with them:
-                  <pre className="ContractInfo">{ctcInfoStr}</pre>
-                   </div>
-                  
+                  <br />
+                  <div className="subtitle">
+                    {" "}
+                    Your event is ready for users to RSVP to!
+                    <br />
+                    Please share the following contract info with them:
+                    <pre className="ContractInfo">{ctcInfoStr}</pre>
+                  </div>
                 </div>
                 <div class="forbuttons">
                   <button type="button" onClick={this.callClose}>
@@ -430,39 +450,46 @@ class RSVP extends React.Component {
         <div className="hero">
           <div className="rsvp_part">
             <div className="form">
-            <div className="title">Rsvp a Event</div>
-            <div className="input-container ic1">
-              <input id='ContractInfo'
-              className="inputy"
-              spellCheck="false"
-              onChange={(e) =>
-                this.setState({ ctcInfoStr: e.currentTarget.value })
-              }
-              placeholder="{}"
-            />
-            <div class="cut"></div>
-            <label for="ContractInfo" className="placeholder">What is the event info?</label>
+              <div className="title">Rsvp a Event</div>
+              <div className="input-container ic1">
+                <input
+                  id="ContractInfo"
+                  className="inputy"
+                  spellCheck="false"
+                  onChange={(e) =>
+                    this.setState({ ctcInfoStr: e.currentTarget.value })
+                  }
+                  placeholder="{}"
+                />
+                <div class="cut"></div>
+                <label for="ContractInfo" className="placeholder">
+                  What is the event info?
+                </label>
+              </div>
+
+              <button
+                className="submit"
+                disabled={!ctcInfoStr}
+                onClick={() => parent.doRSVP(ctcInfoStr)}
+              >
+                RSVP
+              </button>
             </div>
-            
-            <button
-            className="submit"
-              disabled={!ctcInfoStr}
-              onClick={() => parent.doRSVP(ctcInfoStr)}
-            >
-              RSVP
-            </button>
-            </div>
-           
           </div>
         </div>
       );
     } else if (mode === "Wait") {
-      me = <div><ReactLoading
-      type={"spinningBubbles"}
-      color={"#03fc4e"}
-      height={100}
-      width={100}
-    />Please wait while your RSVP is confirmed. </div>;
+      me = (
+        <div>
+          <ReactLoading
+            type={"spinningBubbles"}
+            color={"#03fc4e"}
+            height={100}
+            width={100}
+          />
+          Please wait while your RSVP is confirmed.{" "}
+        </div>
+      );
     } else {
       // 'Done'
       const { acc } = this.props;
@@ -504,48 +531,59 @@ class Checkin extends React.Component {
             <div className="form">
               <div class="title">Checkin an Event</div>
               <div className="input-container ic1">
-               <input
-               id="ContractInfo"
-              className="inputy"
-              spellCheck="false"
-              onChange={(e) =>
-                this.setState({ ctcInfoStr: e.currentTarget.value })
-              }
-              />
-              <div class="cut"></div>
-              <label for="ContractInfo" class="placeholder">Event Info</label>
+                <input
+                  id="ContractInfo"
+                  className="inputy"
+                  spellCheck="false"
+                  onChange={(e) =>
+                    this.setState({ ctcInfoStr: e.currentTarget.value })
+                  }
+                />
+                <div class="cut"></div>
+                <label for="ContractInfo" class="placeholder">
+                  Event Info
+                </label>
+              </div>
+
+              <div className="input-container ic2">
+                <input
+                  id="who"
+                  className="inputy"
+                  onChange={(e) =>
+                    this.setState({
+                      who: e.currentTarget.value,
+                    })
+                  }
+                />
+                <div className="cut"></div>
+                <label for="who" className="placeholder">
+                  who
+                </label>
+              </div>
+
+              <button
+                className="submit"
+                disabled={!ctcInfoStr}
+                onClick={() => parent.doCheckin(ctcInfoStr, who)}
+              >
+                RSVP
+              </button>
             </div>
-           
-            <div className="input-container ic2">
-              <input id="who" className="inputy"
-                onChange={(e) =>
-                this.setState({
-                  who: e.currentTarget.value,
-                })
-                }
-              />
-              <div className="cut"></div>
-              <label for="who" className="placeholder">who</label>
-            </div>
-            
-            <button className="submit"
-              disabled={!ctcInfoStr}
-              onClick={() => parent.doCheckin(ctcInfoStr, who)}
-            >
-              RSVP
-            </button>
-            </div>
-            
           </div>
         </div>
       );
     } else if (mode === "Wait") {
-      me = <div><ReactLoading
-      type={"spinningBubbles"}
-      color={"#03fc4e"}
-      height={100}
-      width={100}
-    />Please wait while your checkin is confirmed.</div>;
+      me = (
+        <div>
+          <ReactLoading
+            type={"spinningBubbles"}
+            color={"#03fc4e"}
+            height={100}
+            width={100}
+          />
+          Please wait while your checkin is confirmed.
+        </div>
+      );
     } else {
       // 'Done'
       const who = this.state?.who || "";
@@ -579,41 +617,48 @@ class Close extends React.Component {
     if (mode === "EnterInfo") {
       const ctcInfoStr = this.state?.ctcInfoStr || "";
       me = (
-          <div className="hero">
+        <div className="hero">
           <div className="rsvp_part">
             <div className="form">
               <div class="title">Checkin an Event</div>
               <div className="input-container ic1">
-                 <input
+                <input
                   id="ContractInfo"
                   className="inputy"
                   spellCheck="false"
                   onChange={(e) =>
-                  this.setState({ ctcInfoStr: e.currentTarget.value })
-                    }
+                    this.setState({ ctcInfoStr: e.currentTarget.value })
+                  }
                   placeholder="{}"
                 />
                 <div class="cut"></div>
-                <label for="ContractInfo" class="placeholder">Close Contract</label>
+                <label for="ContractInfo" class="placeholder">
+                  Close Contract
+                </label>
               </div>
-              <button className="submit"
-            // disabled={!ctcInfoStr}
-            onClick={() => parent.doClose(ctcInfoStr)}
-          >
-            Close
-          </button>
+              <button
+                className="submit"
+                // disabled={!ctcInfoStr}
+                onClick={() => parent.doClose(ctcInfoStr)}
+              >
+                Close
+              </button>
             </div>
-            </div>
-            </div>
-          
+          </div>
+        </div>
       );
     } else if (mode === "Wait") {
-      me = <div><ReactLoading
-      type={"spinningBubbles"}
-      color={"#03fc4e"}
-      height={100}
-      width={100}
-    />Please wait while your close is confirmed.</div>;
+      me = (
+        <div>
+          <ReactLoading
+            type={"spinningBubbles"}
+            color={"#03fc4e"}
+            height={100}
+            width={100}
+          />
+          Please wait while your close is confirmed.
+        </div>
+      );
     } else {
       // 'Done'
       me = <div>You have closed the event.</div>;

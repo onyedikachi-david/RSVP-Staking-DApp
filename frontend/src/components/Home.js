@@ -32,7 +32,7 @@ function Home () {
         <div class="container">
           <div class="hero-text">
             <h3>Hi, There!</h3>
-            <h1>Welcome <span class="input">To Umoja RSVP hub.</span></h1>
+            <h1>Welcome <span class="input">To RSVP DApp Using Reach.sh.</span></h1>
             <p>
               Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nostrum
               quisquam repellendus, enim dolorem dignissimos recusandae fugit
