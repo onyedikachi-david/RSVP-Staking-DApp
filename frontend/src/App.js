@@ -2,7 +2,8 @@ import React from "react";
 // import { Lines } from 'react-preloaders';
 import ReactLoading from "react-loading";
 import "./components/home.css";
-// import { useState } from 'react';
+import UAuth from "@uauth/js";
+import { useState } from "react";
 
 import * as backend from "./builds/index.main.mjs";
 import { loadStdlib } from "@reach-sh/stdlib";
@@ -21,12 +22,75 @@ const { standardUnit } = stdlib;
 const defaultPrice = "20";
 const defaultDeadline = "50";
 
+const uauth = new UAuth({
+  // These can be copied from the bottom of your app's configuration page.
+  clientID: 'e6f20d26-5bca-4429-a9b4-942054fcdfc2',
+
+  // These are the scopes your app is requesting from the ud server.
+  scope: "openid email wallet",
+
+  // This is the url that the auth server will redirect back to after every authorization attempt.
+  redirectUri:'http://localhost:3000',
+});
+
+// const [errorMessage, setErrorMessage] = useState(null);
+
+
+
 //       }
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { mode: "Connect", first: true };
+    this.state = { 
+      mode: "Connect",
+      first: true,
+      errorMessage: "",
+      user: "",
+      redirectTo: "" };
   }
+
+  componentDidMount() {
+   const checker = () => {
+      uauth.user()
+        .then((user) => {
+          // user exists
+          // console.log("User information:", user)})
+          this.setState({user: user}) })
+        .catch(error => {
+          console.error('profile error:', error)
+          this.setState({redirectTo: + error.message})
+          // setRedirectTo('/login?error=' + error.message)
+        })
+    }
+
+    const callBack = () => {
+      // Try to exchange authorization code for access and id tokens.
+      uauth
+        .loginCallback()
+        // Successfully logged and cached user in `window.localStorage`
+        .then(response => {
+          console.log('loginCallback ->', response)
+          // setRedirectTo('/profile')
+        })
+        // Failed to exchange authorization code for token.
+        .catch(error => {
+          console.error('callback error:', error)
+          // setRedirectTo('/login?error=' + error.message)
+        })
+    }
+
+    callBack();
+
+    checker();
+  }
+
+  handleLoginButtonClick = (e) => {
+    this.setState({errorMessage : ""});
+    uauth.login().catch(function (error) {
+      console.error("login error:", error);
+      this.setState({errorMessage : error});
+    });
+  };
 
   changeColor = () => {
     this.setState({ first: !this.state.first });
@@ -114,15 +178,20 @@ class App extends React.Component {
               <div className="hero-text">
                 <h3>Hi, There!</h3>
                 <h1>
-                  Welcome <span className="input">To RSVP DApp Using reach.sh</span>
+                  Welcome{" "}
+                  <span className="input">To RSVP DApp Using reach.sh</span>
                 </h1>
                 <div className="list">
-                  An RSVP application, which allow you to 
+                  An RSVP application, which allow you to
                   <ul>
-                  <li>Create an event.</li>
-                  <li>Have a backoffice/admin area for managing the event, and </li>
-                  <li>A front facing area for users to purchase their tickets/RSVP by
-                  staking themselves.</li>
+                    <li>Create an event.</li>
+                    <li>
+                      Have a backoffice/admin area for managing the event, and{" "}
+                    </li>
+                    <li>
+                      A front facing area for users to purchase their
+                      tickets/RSVP by staking themselves.
+                    </li>
                   </ul>
                 </div>
                 <div className="social">
@@ -146,6 +215,12 @@ class App extends React.Component {
                   <button type="button" onClick={this.asyncCallCreate}>
                     Connect Wallet
                   </button>
+                  <>
+                    {this.state.errorMessage && <div>{this.state.errorMessage}</div>}
+                    <button onClick={this.handleLoginButtonClick}>
+                      Login with Unstoppable
+                    </button>
+                  </>
                 </div>
               </div>
 
